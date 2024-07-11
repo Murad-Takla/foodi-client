@@ -1,0 +1,23 @@
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  
+  @keyframes blink {
+    from, to { border-color: transparent; }
+    50% { border-color: white; }
+  }
+  
+  @keyframes underline {
+    from { text-decoration: none; }
+    to { text-decoration: underline; }
+  }
+  
+  .animate-typing {
+    width: 100%;
+    animation: typing 2s steps(12, end), blink .75s step-end infinite, underline 2s steps(12, end);
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 4px solid white;
+  }
+  
