@@ -10,7 +10,7 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className=''>
+    <div className='container mx-auto'>
       <RouterProvider router={router}></RouterProvider>
       <Toaster></Toaster>
     </div>

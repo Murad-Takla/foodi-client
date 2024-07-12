@@ -1,14 +1,46 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const OrderItems = ({ order, fetchOrders }) => {
-   
-    const [orderInfo , setOrderInfo] = useState({})
+    // console.log(order)
+    const { details, category } = order
+    const [orderInfo, setOrderInfo] = useState({})
+    const [showModal, setShowModal] = useState(false)
+    const [modalContent, setModalContent] = useState({ category: '', details: '' });
     useEffect(() => {
         fetch(`http://localhost:3000/items/${order.order}`)
-        .then(res => res.json())
-        .then(data => setOrderInfo(data))
+            .then(res => res.json())
+            .then(data => setOrderInfo(data))
     }, [order])
-    // console.log(orderInfo)
+    const deleteOrderHandler = (id) => {
+
+        const agree = window.confirm(`Are you sure to delete ${order.category}`)
+        if (agree) {
+            fetch(`http://localhost:3000/orders/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(order)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.deletedCount > 0) {
+                        toast.success(`${order.category} Successfully deleted!`);
+                        fetchOrders();  // Re-fetch orders after deletion
+                    }
+                });
+        }
+
+    }
+    const handleDetailsClick = () => {
+        setShowModal(true)
+        setModalContent({ category, details })
+
+    }
+    const closeModal = () => {
+        setShowModal(false);
+    };
     return (
         <div className="font-sans max-w-4xl max-md:max-w-xl mx-auto p-4">
 
@@ -28,58 +60,31 @@ const OrderItems = ({ order, fetchOrders }) => {
                                         {order.customer}
                                     </h3>
                                     <p className="text-sm font-semibold text-gray-500 mt-2 flex items-center gap-2">
-                                        
-                                       {order.category}
+
+                                        {order.category}
                                     </p>
                                 </div>
-                                <div className="mt-auto flex items-center gap-3">
-                                    <button
-                                        type="button"
-                                        className="flex items-center justify-center w-5 h-5 bg-gray-400 outline-none rounded-full"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="w-2 fill-white"
-                                            viewBox="0 0 124 124"
-                                        >
-                                            <path
-                                                d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                                                data-original="#000000"
-                                            />
-                                        </svg>
-                                    </button>
-                                    <span className="font-bold text-sm leading-[18px]">2</span>
-                                    <button
-                                        type="button"
-                                        className="flex items-center justify-center w-5 h-5 bg-gray-400 outline-none rounded-full"
-                                    >
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="w-2 fill-white"
-                                            viewBox="0 0 42 42"
-                                        >
-                                            <path
-                                                d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                                                data-original="#000000"
-                                            />
-                                        </svg>
-                                    </button>
+                                <div className="mt-auto flex font-bold text-gray-400">
+                                    <p>Phone: <span> {order.Mobile}</span> </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="ml-auto flex flex-col">
-                            <div className="flex items-start gap-4 justify-end">
+                        <div className="ml-auto flex flex-col ">
+                            <div className="flex  gap-4 justify-end items-center ">
                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
+                                    onClick={handleDetailsClick}
                                     className="w-4 cursor-pointer fill-gray-400 inline-block"
-                                    viewBox="0 0 64 64"
-                                >
-                                    <path
-                                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
-                                        data-original="#000000"
-                                    />
+                                    viewBox="0 0 20 20"
+                                    version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                                    <path d="M0 0 C3.5 0.25 3.5 0.25 5.5 2.25 C5.9140625 4.6328125 5.9140625 4.6328125 6.125 7.375 C6.19976562 8.28507812 6.27453125 9.19515625 6.3515625 10.1328125 C6.40054687 10.83148438 6.44953125 11.53015625 6.5 12.25 C4.87419034 12.13601335 3.24932843 12.00844341 1.625 11.875 C0.72007813 11.80539063 -0.18484375 11.73578125 -1.1171875 11.6640625 C-3.5 11.25 -3.5 11.25 -5.5 9.25 C-5.75 5.75 -5.75 5.75 -5.5 2.25 C-3.5 0.25 -3.5 0.25 0 0 Z M0.5 3.25 C0.5 4.24 0.5 5.23 0.5 6.25 C-0.49 6.58 -1.48 6.91 -2.5 7.25 C-0.025 7.745 -0.025 7.745 2.5 8.25 C2.17 6.6 1.84 4.95 1.5 3.25 C1.17 3.25 0.84 3.25 0.5 3.25 Z " fill="#CDD1D7" transform="translate(17.5,11.75)" />
+                                    <path d="M0 0 C5.28 0 10.56 0 16 0 C16 2.97 16 5.94 16 9 C15.34 9 14.68 9 14 9 C14 6.69 14 4.38 14 2 C10.04 2 6.08 2 2 2 C2 7.28 2 12.56 2 18 C3.65 18 5.3 18 7 18 C7.33 18.66 7.66 19.32 8 20 C5.36 20 2.72 20 0 20 C0 13.4 0 6.8 0 0 Z " fill="#9ca3af" transform="translate(4,2)" />
+                                    <path d="M0 0 C2.64 0 5.28 0 8 0 C8 0.66 8 1.32 8 2 C5.36 2 2.72 2 0 2 C0 1.34 0 0.68 0 0 Z " fill="##9ca3af" transform="translate(8,7)" />
+                                    <path d="M0 0 C1.98 0 3.96 0 6 0 C5.67 0.66 5.34 1.32 5 2 C3.35 2 1.7 2 0 2 C0 1.34 0 0.68 0 0 Z " fill="#9ca3af" transform="translate(8,11)" />
+                                    <path d="M0 0 C0.99 0 1.98 0 3 0 C3 0.66 3 1.32 3 2 C2.01 2 1.02 2 0 2 C0 1.34 0 0.68 0 0 Z " fill="#CDD1D7" transform="translate(8,15)" />
                                 </svg>
                                 <svg
+
+                                    onClick={() => deleteOrderHandler(order._id)}
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="w-4 cursor-pointer fill-gray-400 inline-block"
                                     viewBox="0 0 24 24"
@@ -100,55 +105,33 @@ const OrderItems = ({ order, fetchOrders }) => {
 
 
                 </div>
-                {/* <div className="bg-white rounded-md px-4 py-6 h-max shadow-[0_2px_12px_-3px_rgba(6,81,237,0.3)]">
-                    <ul className="text-gray-800 space-y-4">
-                        <li className="flex flex-wrap gap-4 text-sm">
-                            Subtotal <span className="ml-auto font-bold">$200.00</span>
-                        </li>
-                        <li className="flex flex-wrap gap-4 text-sm">
-                            Shipping <span className="ml-auto font-bold">$2.00</span>
-                        </li>
-                        <li className="flex flex-wrap gap-4 text-sm">
-                            Tax <span className="ml-auto font-bold">$4.00</span>
-                        </li>
-                        <hr className="border-gray-300" />
-                        <li className="flex flex-wrap gap-4 text-sm font-bold">
-                            Total <span className="ml-auto">$206.00</span>
-                        </li>
-                    </ul>
-                    <div className="mt-8 space-y-2">
-                        <button
-                            type="button"
-                            className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-800 hover:bg-gray-900 text-white rounded-md"
-                        >
-                            Buy Now
-                        </button>
-                        <button
-                            type="button"
-                            className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-gray-100 text-gray-800 border border-gray-300 rounded-md"
-                        >
-                            Continue Shopping
-                        </button>
-                    </div>
-                    <div className="mt-4 flex flex-wrap justify-center gap-4">
-                        <img
-                            src="https://readymadeui.com/images/master.webp"
-                            alt="card1"
-                            className="w-10 object-contain"
-                        />
-                        <img
-                            src="https://readymadeui.com/images/visa.webp"
-                            alt="card2"
-                            className="w-10 object-contain"
-                        />
-                        <img
-                            src="https://readymadeui.com/images/american-express.webp"
-                            alt="card3"
-                            className="w-10 object-contain"
-                        />
-                    </div>
-                </div> */}
+
             </div>
+
+            {showModal && (
+                <div className="modal modal-open">
+                    <div className="modal-box">
+                        <h3 className="font-bold text-lg">Yours Order: {modalContent.category}</h3>
+                        <p className="py-4 font-semibold">Details : <span className='text-gray-500'>{modalContent.details}</span></p>
+                        <div className="modal-action">
+                            <button onClick={closeModal} className="btn btn-circle btn-outline">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
     );

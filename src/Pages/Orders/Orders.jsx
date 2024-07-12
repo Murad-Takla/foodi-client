@@ -11,6 +11,7 @@ const Orders = () => {
 
     const [orders, setOrders] = useState([])
     const [loader, setLoader] = useState(true)
+    
     const fetchOrders = () => {
         fetch(`http://localhost:3000/orders?email=${email}`)
             .then(res => res.json())
@@ -28,7 +29,11 @@ const Orders = () => {
     return (
         <div className='p-4'>
             <Banner img={img} title={title}></Banner>
-            <h1 className=" text-2xl font-extrabold text-gray-800 mt-5">Your Orders</h1>
+            {/* <h1 className=" text-2xl font-extrabold text-gray-800 mt-5">Your Orders</h1> */}
+            <h2 className="text-2xl font-extrabold text-gray-800 mt-5 group">
+            Your Orders
+                <div className="bg-[#C72624] h-[2px] w-0 group-hover:w-full transition-all duration-500" />
+            </h2>
 
             {
                 loader ? <Spinner></Spinner> : (<>
