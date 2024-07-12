@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ItemDetails from '../ItemDetails/ItemDetails';
 import './items.css'
+import Spinner from '../Spinner/Spinner';
 
 const Items = () => {
     const [items, setItems] = useState([])
@@ -26,14 +27,16 @@ const Items = () => {
                 </div>
             </div>
 
+            {
+                loading ? <Spinner></Spinner> : <div className='grid lg:grid-cols-2 justify-items-center'>
 
-            <div className='grid lg:grid-cols-2 justify-items-center'>
+                    {
+                        items.map(item => <ItemDetails item={item} key={item.idCategory} ></ItemDetails>)
+                    }
 
-                {
-                    items.map(item => <ItemDetails item={item} key={item.idCategory} ></ItemDetails>)
-                }
+                </div>
+            }
 
-            </div>
         </>
     );
 };

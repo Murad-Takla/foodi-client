@@ -1,15 +1,55 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../Context/MyContext';
+import toast from 'react-hot-toast';
 
 const ItemForm = ({ itemData }) => {
-    const { price, strCategory, _id } = itemData
+    // const { price, strCategory, _id } = itemData
+    const { user } = useContext(AuthContext)
+
+    // console.log(itemData, user)
+    const checkoutFormHandler = (event) => {
+        event.preventDefault()
+        const form = event.target
+
+        const name = `${form.firstName.value} ${form.lastName.value}`
+        const email = user?.email || 'not registered yet'
+        const price = itemData.price
+        const details = form.orderDetails.value
+        const phone = form.phone.value
+
+        const order = {
+            order: itemData._id,
+            category: itemData.strCategory,
+            customer: name,
+            email,
+            price,
+            details,
+            Mobile: phone
+        }
+        fetch('http://localhost:3000/orders', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order)
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                form.reset()
+                toast.success('Your order in confirmed')
+            })
+
+    }
     return (
-        <div className="bg-white  border-4 rounded-lg shadow relative m-10">
+        <div className="bg-white  border-2 border-red-500 rounded-lg shadow relative m-10">
             <div className="flex items-start justify-between p-5 border-b rounded-t">
-                <h3 className="text-xl font-semibold">{strCategory}</h3>
+                <h3 className="text-2xl font-bold text-[#DC3545] ">Food name name : {itemData.strCategory}</h3>
 
             </div>
             <div className="p-6 space-y-6">
-                <form action="#">
+                <form
+                    onSubmit={checkoutFormHandler}>
                     <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 sm:col-span-3">
                             <label
@@ -23,12 +63,12 @@ const ItemForm = ({ itemData }) => {
                                 name="firstName"
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 placeholder="your first name . ."
-                                required=""
+                                required
                             />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
                             <label
-                                htmlFor="firstName"
+                                htmlFor="lastName"
                                 className="text-sm font-medium text-gray-900 block mb-2"
                             >
                                 Last Name
@@ -38,7 +78,7 @@ const ItemForm = ({ itemData }) => {
                                 name="lastName"
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 placeholder="your last name . ."
-                                required=""
+                                required
                             />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
@@ -53,7 +93,7 @@ const ItemForm = ({ itemData }) => {
                                 name="phone"
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
                                 placeholder="Mobile . ."
-                                required=""
+                                required
                             />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
@@ -67,8 +107,9 @@ const ItemForm = ({ itemData }) => {
                                 type="email"
                                 name="email"
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                defaultValue={'email'}
-                               readOnly
+                                defaultValue={`${user?.email}`}
+                                readOnly
+
                             />
                         </div>
                         <div className="col-span-6 sm:col-span-3">
@@ -83,8 +124,9 @@ const ItemForm = ({ itemData }) => {
                                 name="price"
                                 id="price"
                                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-2.5"
-                                defaultValue={price}
+                                defaultValue={itemData.price}
                                 readOnly
+                                required
                             />
                         </div>
                         <div className="col-span-full">
@@ -95,25 +137,28 @@ const ItemForm = ({ itemData }) => {
                                 Order Details
                             </label>
                             <textarea
-                                name='order-details'
-                                id="order-details"
+                                required
+                                name='orderDetails'
+                                id="orderDetails"
                                 rows={6}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
                                 placeholder="Details"
-                                defaultValue={""}
+
                             />
                         </div>
                     </div>
+                    <div className="py-5 border-t border-gray-200 rounded-b">
+                        <button
+                            className="text-white bg-[#DC3545] hover:bg-[#E62626] focus:ring-4 
+                     font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                            type="submit"
+                        >
+                            Confirm
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div className="p-6 border-t border-gray-200 rounded-b">
-                <button
-                    className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    type="submit"
-                >
-                    Save all
-                </button>
-            </div>
+
         </div>
 
     );
