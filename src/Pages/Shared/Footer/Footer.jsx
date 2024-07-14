@@ -1,19 +1,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Author from '../../../Components/Author/Author.jsx';
 
 const Footer = () => {
     return (
         <div>
-            <footer className="footer bg-base-200  items-center p-4">
-
-
-                <aside className="grid-flow-col items-center">
+            <footer className="footer bg-base-200 items-center p-4 flex flex-col lg:flex-row justify-between">
+                <aside className="flex items-center mb-4 lg:mb-0">
                     <img
-                        className='h-[50px] w-[50px]'
+                        className="h-[50px] w-[50px]"
                         src="https://foodibd.com/_next/static/media/logo.c6a0f759.svg" alt="" />
-                    <p className='font-semibold'>Copyright © ${new Date().getFullYear()} - All right reserved</p>
+                    <p className="font-semibold ml-2">Copyright © {new Date().getFullYear()} - All rights reserved</p>
                 </aside>
-                <nav className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
+                
+                <div className="mb-4 lg:mb-0">
+                    <Author></Author>
+                </div>
+                
+                <nav className="flex gap-4">
                     <Link to={`/`}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

@@ -8,7 +8,7 @@ const OrderItems = ({ order, fetchOrders }) => {
     const [showModal, setShowModal] = useState(false)
     const [modalContent, setModalContent] = useState({ category: '', details: '' });
     useEffect(() => {
-        fetch(`http://localhost:3000/items/${order.order}`)
+        fetch(`https://foodi-server-two.vercel.app/items/${order.order}`)
             .then(res => res.json())
             .then(data => setOrderInfo(data))
     }, [order])
@@ -16,7 +16,7 @@ const OrderItems = ({ order, fetchOrders }) => {
 
         const agree = window.confirm(`Are you sure to delete ${order.category}`)
         if (agree) {
-            fetch(`http://localhost:3000/orders/${id}`, {
+            fetch(`https://foodi-server-two.vercel.app/orders/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

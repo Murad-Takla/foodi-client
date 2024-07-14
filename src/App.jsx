@@ -5,14 +5,17 @@ import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './Routers/Routes'
 import { Toaster } from 'react-hot-toast'
+import { OrderProvider } from './Components/Context/OrderContext '
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className='container mx-auto'>
-      <RouterProvider router={router}></RouterProvider>
-      <Toaster></Toaster>
+      <OrderProvider>
+        <RouterProvider router={router}></RouterProvider>
+        <Toaster></Toaster>
+      </OrderProvider>
     </div>
 
   )

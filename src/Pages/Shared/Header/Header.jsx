@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import { Link } from "react-router-dom";
 import { AuthContext } from '../../../Components/Context/MyContext';
 import CartIcon from '../../../Components/CartIcon/CartIcon';
+import { OrderContext } from '../../../Components/Context/OrderContext ';
 const Header = () => {
     const { user, logOut } = useContext(AuthContext)
+    const { orderCount } = useContext(OrderContext);
     const logoutHandler = () => {
         logOut()
 
@@ -45,7 +47,7 @@ const Header = () => {
                         </ul>
                         <div className="flex gap-2 items-center">
                             {
-                                user?.email && <CartIcon></CartIcon>
+                                user?.email && <CartIcon orderCount={orderCount}></CartIcon>
                             }
                             {
                                 user?.email ? <><button

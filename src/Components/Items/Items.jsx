@@ -8,7 +8,7 @@ const Items = () => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        fetch(`http://localhost:3000/items`)
+        fetch(`https://foodi-server-two.vercel.app/items`)
             .then(res => res.json())
             .then(data => {
                 setItems(data)

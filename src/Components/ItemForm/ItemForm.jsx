@@ -26,7 +26,7 @@ const ItemForm = ({ itemData }) => {
             details,
             Mobile: phone
         }
-        fetch('http://localhost:3000/orders', {
+        fetch('https://foodi-server-two.vercel.app/orders', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -35,7 +35,6 @@ const ItemForm = ({ itemData }) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 form.reset()
                 toast.success('Your order in confirmed')
             })

@@ -5,8 +5,7 @@ import checkout from '../../assets/checkout.jpg'
 import ItemForm from '../../Components/ItemForm/ItemForm';
 import { AuthContext } from '../../Components/Context/MyContext';
 const CheckoutPage = () => {
-    const {user} = useContext(AuthContext)
-    console.log(user)
+   
     const  title = 'Checkout'
     const itemData= useLoaderData()
     return (

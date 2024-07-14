@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
            {
             path: '/items/:id',
             element: <PrivateRouter><CheckoutPage></CheckoutPage></PrivateRouter>,
-            loader: ({params})=> fetch(`http://localhost:3000/items/${params.id}`)
+            loader: ({params})=> fetch(`https://foodi-server-two.vercel.app/items/${params.id}`)
            },
            {
             path: '/signIn',

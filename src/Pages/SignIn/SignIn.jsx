@@ -25,7 +25,7 @@ const SignIn = () => {
             const tokenInfo = {
                 email: user.email
             }
-           fetch(`http://localhost:3000/jwt`, {
+           fetch(`https://foodi-server-two.vercel.app/jwt`, {
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json'
@@ -34,7 +34,6 @@ const SignIn = () => {
            })
            .then(res => res.json())
            .then(data => {
-            console.log(data.token)
             localStorage.setItem('foodi' , data.token)
             navigate(From, { replace: true })
            })
