@@ -22,8 +22,22 @@ const SignIn = () => {
             const user = result.user 
             form.reset()
             toast.success(`Successfully Logged in !`)
-           
+            const tokenInfo = {
+                email: user.email
+            }
+           fetch(`http://localhost:3000/jwt`, {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(tokenInfo)
+           })
+           .then(res => res.json())
+           .then(data => {
+            console.log(data.token)
+            localStorage.setItem('foodi' , data.token)
             navigate(From, { replace: true })
+           })
         })
         .catch(err => console.error(err))
 

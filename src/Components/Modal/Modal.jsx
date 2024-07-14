@@ -8,7 +8,7 @@ const Modal = ({ closeModal }) => {
     
     const {createUser} = useContext(AuthContext) 
     // console.log(createUser)
-    const From = location?.state?.from?.pathname || '/signIn'
+    const From = location?.state?.from?.pathname || '/'
     const navigate = useNavigate()
     // const {createUser} = useContext(authContext)
     // console.log(createUser)
