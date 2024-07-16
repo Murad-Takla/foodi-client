@@ -13,9 +13,9 @@ const Footer = () => {
                     <p className="font-semibold ml-2">Copyright © {new Date().getFullYear()} - All rights reserved</p>
                 </aside>
                 
-                <div className="mb-4 lg:mb-0">
+                {/* <div className="mb-4 lg:mb-0">
                     <Author></Author>
-                </div>
+                </div> */}
                 
                 <nav className="flex gap-4">
                     <Link to={`/`}>

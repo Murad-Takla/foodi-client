@@ -2,16 +2,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Context/MyContext';
 
-const CartIcon = ({orderCount }) => {
+const CartIcon = () => {
    
-   
+ 
     return (
         <div className="relative mr-8">
             <Link to={'/cart'}>
 
                 <div className="t-0 absolute left-3">
                     <p className="flex h-2 w-2 items-center justify-center rounded-full bg-red-500 p-3 text-xs text-white">
-                     {orderCount}
+                     Cart
                     </p>
                 </div>
                 <svg

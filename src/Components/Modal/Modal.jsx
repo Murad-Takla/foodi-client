@@ -7,11 +7,10 @@ import { useNavigate } from 'react-router-dom';
 const Modal = ({ closeModal }) => {
     
     const {createUser} = useContext(AuthContext) 
-    // console.log(createUser)
+
     const From = location?.state?.from?.pathname || '/'
     const navigate = useNavigate()
-    // const {createUser} = useContext(authContext)
-    // console.log(createUser)
+  
 
     const signUpFormHandler = (event) => {
         event.preventDefault()
@@ -30,12 +29,28 @@ const Modal = ({ closeModal }) => {
             const user = result.user 
             form.reset()
             toast.success(`Successfully Registered `)
+
+
+            const tokenInfo = {
+                email
+            }
+            fetch('https://foodi-server-two.vercel.app/jwt', {
+                method:'POST',
+                headers: {
+                    'content-type' : 'application/json'
+                },
+                body: JSON.stringify(tokenInfo)
+            })
+            .then(res => res.json())
+            .then(data => {
+                // local storage is the easiest but not the best place to store the jwt token 
+                localStorage.setItem('foodi' , data.token)
+            })
+
             navigate(From , {replace:true})
         })
         .catch(err => console.error(err))
 
-
-        console.log(email)
     }
 
     return (

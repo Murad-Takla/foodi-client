@@ -17,28 +17,39 @@ const SignIn = () => {
         const email = form.email.value
         const password = form.password.value
 
-        signIn(email , password)
-        .then(result => {
-            const user = result.user 
-            form.reset()
-            toast.success(`Successfully Logged in !`)
-            const tokenInfo = {
-                email: user.email
-            }
-           fetch(`https://foodi-server-two.vercel.app/jwt`, {
-            method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify(tokenInfo)
-           })
-           .then(res => res.json())
-           .then(data => {
-            localStorage.setItem('foodi' , data.token)
-            navigate(From, { replace: true })
-           })
-        })
-        .catch(err => console.error(err))
+        signIn(email, password)
+            .then(result => {
+                const user = result.user
+                form.reset()
+                toast.success(`Successfully Logged in !`)
+
+                //get jwt token
+
+                const tokenInfo = {
+                    email
+                }
+                fetch('https://foodi-server-two.vercel.app/jwt', {
+                    method:'POST',
+                    headers: {
+                        'content-type' : 'application/json'
+                    },
+                    body: JSON.stringify(tokenInfo)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    // local storage is the easiest but not the best place to store the jwt token 
+                    localStorage.setItem('foodi' , data.token)
+                })
+
+                   
+                navigate(From, { replace: true })
+            })
+            .catch(err => {
+                if (err) {
+                    toast.error('Invalid user or password')
+                }
+                console.error(err.message)
+            })
 
     }
     return (

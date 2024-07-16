@@ -6,8 +6,9 @@ import Spinner from '../../Components/Spinner/Spinner';
 import OrderItems from '../../Components/OrderItems/OrderItems';
 import { Link, useNavigate } from 'react-router-dom';
 import CartIcon from '../../Components/CartIcon/CartIcon';
+import toast from 'react-hot-toast';
 const Orders = () => {
-    const { user, logout } = useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext)
     const email = user?.email
     const title = 'Orders'
 
@@ -16,15 +17,16 @@ const Orders = () => {
     const navigate = useNavigate();
 
     const fetchOrders = () => {
-        fetch(`https://foodi-server-two.vercel.app/orders?email=${email}`, {
+        fetch(`https://foodi-server-two.vercel.app/orders?email=${user?.email}`, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('foodi')}`
             }
         })
             .then(res => {
                 if (res.status === 401 || res.status === 403) {
-                    logout();
-                    navigate('/signIn');
+
+                    return logOut();
+                   
                 }
                 return res.json()
             })
@@ -38,28 +40,27 @@ const Orders = () => {
         fetchOrders()
     }, [email])
 
-    // console.log(orders)
+  
     return (
         <>
+            <div className='p-4'>  <Banner img={img} title={title}></Banner></div>
             {
                 orders.length === 0 ? <>
-
-                    <Link to={'/'} className='grid  lg:flex gap-2 justify-center text-xl font-mono font-semibold'>
-                        <h1 >You have not select any food. </h1>
-                        <div className=" ">
-                            <div className="relative font-semibold text-blue-600 hover:text-red-600 cursor-pointer transition-all ease-in-out before:transition-[width] before:ease-in-out before:duration-700 before:absolute before:bg-gray-400 before:origin-center before:h-[1px] before:w-0 hover:before:w-[50%] before:bottom-0 before:left-[50%] after:transition-[width] after:ease-in-out after:duration-700 after:absolute after:bg-gray-400 after:origin-center after:h-[1px] after:w-0 hover:after:w-[50%] after:bottom-0 after:right-[50%]">
-                                <span>Click here to order!</span>
-                            </div>
+                    <div className="flex flex-col justify-center items-center my-10">
+                        <div className="text-center">
+                            <p className="text-xl font-bold mb-4">You have no orders.</p>
+                            <Link to="/" className="font-bold font-serif  text-blue-500 underline">
+                                Click here to Order food !
+                            </Link>
                         </div>
-
-                    </Link>
+                    </div>
                 </> : <>
 
                     <div className='p-4'>
-                        <Banner img={img} title={title}></Banner>
-                        {/* <h1 className=" text-2xl font-extrabold text-gray-800 mt-5">Your Orders</h1> */}
+
+
                         <h2 className="text-2xl font-extrabold text-gray-800 mt-5 group">
-                            Your Orders
+                            Your Orders : {orders.length}
                             <div className="bg-[#C72624] h-[2px] w-0 group-hover:w-full transition-all duration-500" />
                         </h2>
 
@@ -72,7 +73,11 @@ const Orders = () => {
                     </div>
                 </>
             }
+
+
         </>
+
+
     );
 };
 

@@ -7,12 +7,16 @@ const ItemDetails = ({ item }) => {
     return (
         <div className="my-5  border bg-[#FFFAFA] rounded-lg  hover:shadow-lg ">
             <div>
-                <img
-                    className="w-full"
-                    src={strCategoryThumb}
-                    alt="Product Image"
-                />
 
+                {
+                    strCategoryThumb ? <> <img
+                        className="w-full"
+                        src={strCategoryThumb}
+                        alt="Product Image"
+                    /></> : <div className='w-full h-full  flex justify-center items-center' >
+                        <span className="loading loading-ring loading-lg "></span>
+                    </div>
+                }
             </div>
             <div className="p-4 mt-10 mb-5 ">
                 <h3 className="text-2xl font-bold  mb-2">{strCategory}</h3>
